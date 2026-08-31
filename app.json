@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "banha-app",
-    "slug": "banha-app",
+    "slug": "banha",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -39,6 +39,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "efb5a719-fe0e-4b6f-8ca7-243a521b9f17"
+      }
+    },
+    "owner": "dashadotts-team"
   }
 }
