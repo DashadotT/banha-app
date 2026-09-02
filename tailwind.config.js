@@ -6,29 +6,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: "#f1f5f9",
-        card: "#ffffff",
-        ink: "#1e293b",
-        muted: "#64748b",
-        border: "#e2e8f0",
+        bg: "#001C3D",
+        card: "#0B2C52",
+        cardAlt: "#0F335C",
+        ink: "#FFFFFF",
+        muted: "#9FB3CC",
+        border: "#1E3A5F",
         primary: {
-          DEFAULT: "#15803d",
-          dark: "#0f5c2c",
-          light: "#22c55e",
+          DEFAULT: "#EBAF1C",
+          dark: "#C4900F",
+          light: "#F4C956",
+          ink: "#001C3D",
         },
-        danger: "#dc2626",
-        warn: "#d97706",
+        danger: "#F87171",
+        warn: "#EBAF1C",
         ok: {
-          bg: "#dcfce7",
-          text: "#15803d",
+          bg: "rgba(34,197,94,0.16)",
+          text: "#4ADE80",
         },
         bad: {
-          bg: "#fee2e2",
-          text: "#dc2626",
+          bg: "rgba(248,113,113,0.16)",
+          text: "#F87171",
         },
         pending: {
-          bg: "#fef3c7",
-          text: "#b45309",
+          bg: "rgba(235,175,28,0.18)",
+          text: "#EBAF1C",
         },
       },
       borderRadius: {

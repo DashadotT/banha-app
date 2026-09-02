@@ -20,13 +20,13 @@ export function PrimaryButton({
       onPress={onPress}
       disabled={disabled || loading}
       className={`mt-3 items-center justify-center rounded-xl px-4 py-3.5 active:opacity-80 ${
-        isSecondary ? "border border-border bg-white" : "bg-primary"
+        isSecondary ? "border border-primary bg-transparent" : "bg-primary"
       } ${disabled || loading ? "opacity-60" : ""}`}
     >
       {loading ? (
-        <ActivityIndicator color={isSecondary ? "#15803d" : "#ffffff"} />
+        <ActivityIndicator color={isSecondary ? "#EBAF1C" : "#001C3D"} />
       ) : (
-        <Text className={`text-base font-bold ${isSecondary ? "text-primary" : "text-white"}`}>
+        <Text className={`text-base font-bold ${isSecondary ? "text-primary" : "text-primary-ink"}`}>
           {label}
         </Text>
       )}
