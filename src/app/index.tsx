@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { Badge, BadgeTone } from "@/components/badge";
 import { Card, CardTitle, StatusRow } from "@/components/card";
+import { Footer } from "@/components/footer";
 import { OfflineNotice } from "@/components/offline-notice";
 import { PrimaryButton } from "@/components/primary-button";
 import { ESP32_AP_SSID } from "@/lib/esp32";
@@ -29,12 +30,12 @@ export default function HomeScreen() {
       className="flex-1 bg-bg"
       contentContainerStyle={{ padding: 18, paddingBottom: 40 }}
       refreshControl={
-        <RefreshControl refreshing={manualRefreshing} onRefresh={onPullToRefresh} tintColor="#15803d" />
+        <RefreshControl refreshing={manualRefreshing} onRefresh={onPullToRefresh} tintColor="#EBAF1C" />
       }
     >
       <View className="mb-6 items-center">
         <View className="mb-2.5 h-14 w-14 items-center justify-center rounded-2xl bg-primary">
-          <Text className="text-xl font-extrabold text-white">B2</Text>
+          <Text className="text-xl font-extrabold text-primary-ink">B2</Text>
         </View>
         <Text className="text-xl font-bold text-ink">BANHA Node 2</Text>
         <Text className="mt-1 text-xs text-muted">Local LoRa Receiver &amp; WiFi Configuration</Text>
@@ -94,12 +95,14 @@ export default function HomeScreen() {
 
           {lastUpdated && (
             <View className="flex-row items-center justify-center gap-1.5 py-2">
-              <Ionicons name="time-outline" size={12} color="#64748b" />
+              <Ionicons name="time-outline" size={12} color="#9FB3CC" />
               <Text className="text-[11px] text-muted">Updated {timeAgo(lastUpdated)}</Text>
             </View>
           )}
         </>
       )}
+
+      <Footer />
     </ScrollView>
   );
 }

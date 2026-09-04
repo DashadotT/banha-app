@@ -104,7 +104,7 @@ export default function WifiSetupScreen() {
           {phase === "success" && (
             <>
               <View className="mb-5 h-16 w-16 items-center justify-center rounded-full bg-ok-bg">
-                <Ionicons name="checkmark" size={32} color="#15803d" />
+                <Ionicons name="checkmark" size={32} color="#4ADE80" />
               </View>
               <Text className="mb-1 text-lg font-bold text-ink">Connected!</Text>
               <Text className="text-center text-sm text-muted">
@@ -118,7 +118,7 @@ export default function WifiSetupScreen() {
           {phase === "fail" && (
             <>
               <View className="mb-5 h-16 w-16 items-center justify-center rounded-full bg-bad-bg">
-                <Ionicons name="close" size={32} color="#dc2626" />
+                <Ionicons name="close" size={32} color="#F87171" />
               </View>
               <Text className="mb-1 text-lg font-bold text-ink">Connection Failed</Text>
               <Text className="text-center text-sm text-muted">
@@ -143,6 +143,7 @@ export default function WifiSetupScreen() {
           value={ssid}
           onChangeText={setSsid}
           placeholder="Your router's WiFi name"
+          placeholderTextColor="#5D7290"
           autoCapitalize="none"
           autoCorrect={false}
           className="mt-1 rounded-xl border border-border bg-bg px-3.5 py-3 text-base text-ink"
@@ -154,13 +155,14 @@ export default function WifiSetupScreen() {
             value={password}
             onChangeText={setPassword}
             placeholder="Enter WiFi password"
+            placeholderTextColor="#5D7290"
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoCorrect={false}
             className="flex-1 px-3.5 py-3 text-base text-ink"
           />
           <Pressable onPress={() => setShowPassword((v) => !v)} className="p-2">
-            <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#64748b" />
+            <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#9FB3CC" />
           </Pressable>
         </View>
 

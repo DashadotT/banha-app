@@ -1,56 +1,83 @@
-# Welcome to your Expo app 👋
+# BANHA Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Talks directly to a BANHA Node 2 ESP32 over its local `BANHA-SETUP` WiFi
+hotspot at `http://192.168.4.1`. No internet, no cloud service, no
+Supabase call is ever made from this app — every request in
+`src/lib/esp32.ts` is a plain HTTP call to that fixed LAN address.
 
-## Get started
+## How it fits your existing project
 
-1. Install dependencies
+You already have `src/app/index.tsx` and `src/app/_layout.tsx` from the
+reset template — this package **replaces** them. Drop everything under
+this zip's `src/` into your project's `src/`, and merge the new
+dependencies from `package.json` into yours (nativewind, tailwindcss,
+`@expo/vector-icons`), keeping your existing `assets/`, `AGENTS.md`,
+`CLAUDE.md`, `app.json` bundle identifiers, etc. as-is.
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+Files added/replaced:
+```
+src/app/_layout.tsx        (replaced — adds the wifi-setup route)
+src/app/index.tsx          (replaced — dashboard screen)
+src/app/wifi-setup.tsx     (new — WiFi config flow)
+src/lib/esp32.ts           (new — HTTP client for the device)
+src/hooks/use-esp32-status.ts (new — polling hook)
+src/components/*.tsx       (new — badge, card, button, offline notice)
+src/global.css             (new — Tailwind entry, if you don't have one)
+tailwind.config.js         (new, or merge the `colors` block into yours)
+babel.config.js / metro.config.js  (new, or merge NativeWind wiring into yours)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Install
 
-### Other setup steps
+```bash
+npm install nativewind tailwindcss @expo/vector-icons
+npx expo install expo-router expo-status-bar expo-linking expo-constants \
+  react-native-safe-area-context react-native-screens
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Run
 
-## Learn more
+1. Flash `node2.ino` to the ESP32 (unchanged — no firmware changes required).
+2. Connect your **phone** to the `BANHA-SETUP` WiFi network
+   (password `banha@nbsc2026`).
+3. `npx expo start`, open the app.
+4. The dashboard auto-polls `/status` every 3s and shows a clear
+   "not connected" screen with instructions if the phone isn't on
+   BANHA-SETUP yet (checked automatically on launch and on any retry).
 
-To learn more about developing your project with Expo, look at the following resources:
+## What talks to what
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **Dashboard** (`index.tsx`) mirrors the device's own web dashboard:
+  router WiFi state, LoRa radio state, recording state, hotspot info —
+  all pulled from `GET /status`, which is the only read endpoint the
+  current firmware exposes.
+- **WiFi Setup** (`wifi-setup.tsx`) posts to `POST /save` (the same
+  endpoint the device's built-in captive page uses) and then polls
+  `/status` until `wifi_connected` flips true/false, exactly like the
+  device's own `getConnectingHTML()` flow — because BANHA-SETUP never
+  goes down during this, the phone stays connected throughout.
 
-## Join the community
+## Known limitation (by design of the current firmware)
 
-Join our community of developers creating universal apps.
+`node2.ino` doesn't currently expose live sensor readings (CO2 / temp /
+noise / packet number) or a way to start/stop a recording over HTTP —
+those are LoRa-only (driven by Node 1) and get pushed straight to
+Supabase from the device. The app can only show what `/status` reports:
+whether a recording is active, not the live values.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+If you want the app to show live readings and let you start/stop
+recordings, add two small pieces to `node2.ino`:
+
+1. Track the most recent reading in a small struct alongside the
+   existing `receivedPacketNumber` / `receivedAverageCO2` /
+   `receivedAverageTemp` / `receivedAverageNoise` globals (they're
+   already there — just don't discard them after upload).
+2. Add two routes in `startWebServer()`:
+   - `GET /api/reading` → JSON of the latest packet + `recording_active`.
+   - (Optional, bigger change) `POST /api/start` / `POST /api/stop` →
+     only makes sense if you also want the phone to be able to trigger
+     a recording independently of Node 1's physical button, which
+     changes the system's source of truth for start/stop.
+
+Happy to write that firmware patch and the matching screen if you want
+it — just ask.

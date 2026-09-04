@@ -1,6 +1,5 @@
-import { Footer } from "@/components/footer";
 import { PrimaryButton } from "@/components/primary-button";
-import { ESP32_AP_PASSWORD, ESP32_AP_SSID } from "@/lib/esp32";
+import { ESP32_AP_SSID } from "@/lib/esp32";
 import { Ionicons } from "@expo/vector-icons";
 import * as IntentLauncher from "expo-intent-launcher";
 import { Linking, Platform, Text, View } from "react-native";
@@ -33,36 +32,31 @@ export function OfflineNotice({
   };
 
   return (
-    <>
-      <View className="items-center rounded-card border border-border bg-card p-8">
-        <View className="mb-5 h-16 w-16 items-center justify-center rounded-full bg-bad-bg">
-          <Ionicons name="wifi-outline" size={32} color="#F87171" />
-        </View>
-
-        <Text className="mb-1 text-center text-lg font-bold text-ink">Not connected to Node 2</Text>
-        <Text className="mb-5 text-center text-sm text-muted">
-          {errorMessage ?? "Connect your phone to the BANHA-SETUP WiFi network to continue."}
-        </Text>
-
-        <View className="mb-1 w-full rounded-xl bg-cardAlt p-4">
-          <Step number={1} text={`Open WiFi settings and join "${ESP32_AP_SSID}"`} />
-          <Step number={2} text={`Password: ${ESP32_AP_PASSWORD}`} />
-          <Step number={3} text="Come back here — the app will reconnect automatically" />
-        </View>
-
-        {Platform.OS === "ios" && (
-          <Text className="mb-1 mt-3 text-center text-[11px] leading-4 text-muted">
-            iOS doesn&apos;t allow apps to jump straight to the WiFi screen — this opens Settings,
-            then tap WiFi from there.
-          </Text>
-        )}
-
-        <PrimaryButton label="Open WiFi Settings" onPress={openWifiSettings} />
-        <PrimaryButton label="Retry Now" onPress={onRetry} loading={retrying} variant="secondary" />
+    <View className="items-center rounded-card border border-border bg-card p-8">
+      <View className="mb-5 h-16 w-16 items-center justify-center rounded-full bg-bad-bg">
+        <Ionicons name="wifi-outline" size={32} color="#F87171" />
       </View>
 
-      <Footer />
-    </>
+      <Text className="mb-1 text-center text-lg font-bold text-ink">Not connected to Node 2</Text>
+      <Text className="mb-5 text-center text-sm text-muted">
+        {errorMessage ?? "Connect your phone to the BANHA-SETUP WiFi network to continue."}
+      </Text>
+
+      <View className="mb-1 w-full rounded-xl bg-cardAlt p-4">
+        <Step number={1} text={`Open WiFi settings and join "${ESP32_AP_SSID}"`} />
+        <Step number={2} text="Come back here — the app will reconnect automatically" />
+      </View>
+
+      {Platform.OS === "ios" && (
+        <Text className="mb-1 mt-3 text-center text-[11px] leading-4 text-muted">
+          iOS doesn&apos;t allow apps to jump straight to the WiFi screen — this opens Settings,
+          then tap WiFi from there.
+        </Text>
+      )}
+
+      <PrimaryButton label="Open WiFi Settings" onPress={openWifiSettings} />
+      <PrimaryButton label="Retry Now" onPress={onRetry} loading={retrying} variant="secondary" />
+    </View>
   );
 }
 

@@ -6,12 +6,12 @@
     "scheme": "banha",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#f1f5f9"
+      "backgroundColor": "#001C3D"
     },
     "ios": {
       "supportsTablet": true,
@@ -49,12 +49,6 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "58f1879c-3974-418d-9acc-d7a5e8725f07"
-      }
     }
   }
 }
