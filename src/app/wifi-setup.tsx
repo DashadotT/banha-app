@@ -1,12 +1,12 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 import { Card, CardTitle } from "@/components/card";
 import { PrimaryButton } from "@/components/primary-button";
-import { Esp32Error, getStatus, saveWifi } from "@/lib/esp32";
 import { useEsp32Status } from "@/hooks/use-esp32-status";
+import { Esp32Error, getStatus, saveWifi } from "@/lib/esp32";
 
 type Phase = "form" | "connecting" | "success" | "fail";
 
@@ -172,7 +172,7 @@ export default function WifiSetupScreen() {
       </Card>
 
       <Text className="px-1 text-xs leading-5 text-muted">
-        This saves the WiFi network Node 2 uses to reach the internet (e.g. for uploads). It doesn't
+        This saves the WiFi network Master node uses to reach the internet (e.g. for uploads). It doesn't
         change how this app talks to the device — that always happens locally over BANHA-SETUP.
       </Text>
     </View>

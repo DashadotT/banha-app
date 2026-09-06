@@ -37,7 +37,7 @@ export function OfflineNotice({
         <Ionicons name="wifi-outline" size={32} color="#F87171" />
       </View>
 
-      <Text className="mb-1 text-center text-lg font-bold text-ink">Not connected to Node 2</Text>
+      <Text className="mb-1 text-center text-lg font-bold text-ink">Not connected to Master node</Text>
       <Text className="mb-5 text-center text-sm text-muted">
         {errorMessage ?? "Connect your phone to the BANHA-SETUP WiFi network to continue."}
       </Text>

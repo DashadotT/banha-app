@@ -1,15 +1,15 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { RefreshControl, ScrollView, Text, View } from "react-native";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 import { Badge, BadgeTone } from "@/components/badge";
 import { Card, CardTitle, StatusRow } from "@/components/card";
 import { Footer } from "@/components/footer";
 import { OfflineNotice } from "@/components/offline-notice";
 import { PrimaryButton } from "@/components/primary-button";
-import { ESP32_AP_SSID } from "@/lib/esp32";
 import { useEsp32Status } from "@/hooks/use-esp32-status";
+import { ESP32_AP_SSID } from "@/lib/esp32";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -33,17 +33,9 @@ export default function HomeScreen() {
         <RefreshControl refreshing={manualRefreshing} onRefresh={onPullToRefresh} tintColor="#EBAF1C" />
       }
     >
-      <View className="mb-6 items-center">
-        <View className="mb-2.5 h-14 w-14 items-center justify-center rounded-2xl bg-primary">
-          <Text className="text-xl font-extrabold text-primary-ink">B2</Text>
-        </View>
-        <Text className="text-xl font-bold text-ink">BANHA Node 2</Text>
-        <Text className="mt-1 text-xs text-muted">Local LoRa Receiver &amp; WiFi Configuration</Text>
-      </View>
-
       {isChecking && !status && (
         <Card className="items-center py-10">
-          <Text className="text-sm text-muted">Looking for BANHA Node 2…</Text>
+          <Text className="text-sm text-muted">Looking for BANHA master node…</Text>
         </Card>
       )}
 
@@ -83,12 +75,12 @@ export default function HomeScreen() {
           <Card>
             <CardTitle>WiFi Configuration</CardTitle>
             <Text className="mb-1 text-sm leading-5 text-ink">
-              Node 2 is currently {status.wifi_connected ? "connected to your router" : "not connected to a router"}
+              Master node is currently {status.wifi_connected ? "connected to your router" : "not connected to a router"}
               {status.configured_ssid ? ` (${status.configured_ssid})` : ""}.
             </Text>
             <Text className="text-xs leading-5 text-muted">
               Changing this only affects the device's internet-facing WiFi. This app always talks to
-              Node 2 directly over the {ESP32_AP_SSID} hotspot, so it keeps working either way.
+              Master node directly over the {ESP32_AP_SSID} hotspot, so it keeps working either way.
             </Text>
             <PrimaryButton label="Configure Router WiFi" onPress={() => router.push("/wifi-setup")} />
           </Card>

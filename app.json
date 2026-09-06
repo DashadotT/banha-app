@@ -5,11 +5,11 @@
     "version": "1.0.0",
     "scheme": "banha",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#001C3D"
     },
@@ -21,7 +21,7 @@
           "NSAllowsLocalNetworking": true,
           "NSAllowsArbitraryLoads": false
         },
-        "NSLocalNetworkUsageDescription": "BANHA connects to your ESP32 Node 2 device over its local WiFi hotspot (BANHA-SETUP) to configure it and read live status."
+        "NSLocalNetworkUsageDescription": "BANHA connects to your ESP32 Master node device over its local WiFi hotspot (BANHA-SETUP) to configure it and read live status."
       }
     },
     "android": {
@@ -33,7 +33,7 @@
       }
     },
     "web": {
-      "favicon": "./assets/images/favicon.png",
+      "favicon": "./assets/images/logo.png",
       "bundler": "metro"
     },
     "plugins": [
