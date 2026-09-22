@@ -33,9 +33,10 @@ export default function HomeScreen() {
         <RefreshControl refreshing={manualRefreshing} onRefresh={onPullToRefresh} tintColor="#EBAF1C" />
       }
     >
+      
       {isChecking && !status && (
         <Card className="items-center py-10">
-          <Text className="text-sm text-muted">Looking for BANHA master node…</Text>
+          <Text className="text-sm text-muted">Looking for BANHA Master Node</Text>
         </Card>
       )}
 
@@ -68,6 +69,37 @@ export default function HomeScreen() {
                   label={status.recording_active ? "Recording" : "Idle"}
                 />
               }
+            />
+            <StatusRow
+              label="Packets Received"
+              value={status.recording_active ? String(status.packet_number) : "—"}
+              last
+            />
+          </Card>
+
+          <Card>
+            <View className="mb-3.5 flex-row items-center justify-between">
+              <CardTitle>Upload Queue</CardTitle>
+              <Badge
+                tone={status.uploader_busy ? "warn" : "ok"}
+                label={status.uploader_busy ? "Uploading…" : "Idle"}
+              />
+            </View>
+
+            <StatusRow
+              label="Pending Uploads"
+              value={
+                <Badge
+                  tone={status.pending_uploads > 0 ? "warn" : "ok"}
+                  label={String(status.pending_uploads)}
+                />
+              }
+            />
+            <StatusRow label="Successful Uploads" value={String(status.successful_uploads)} />
+            <StatusRow
+              label="Failed Upload Retries"
+              value={String(status.failed_upload_retries)}
+              valueClassName={status.failed_upload_retries > 0 ? "text-danger" : undefined}
               last
             />
           </Card>

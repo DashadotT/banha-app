@@ -5,7 +5,7 @@ import { Linking, Pressable, Text, View } from "react-native";
  * Placeholder contact/credit details — swap these for the real
  * ones whenever you have them (just tell me and I'll update it).
  */
-const CONTACT_EMAIL = "banha.project@example.com";
+const CONTACT_EMAIL = "banha.official@gmail.com";
 const DEVELOPERS = ["Mark Jovan G. Octat", "Ahrdy Jane P. Desalan", "Jacob Israel A. Ranin"];
 
 export function Footer() {

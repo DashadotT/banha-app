@@ -25,7 +25,7 @@ export default function RootLayout() {
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Image
                   source={require("../../assets/images/logo.png")}
-                  style={{ width: 50, height: 50, marginRight: 8 }}
+                  style={{ width: 32, height: 32, marginRight: 8 }}
                   resizeMode="contain"
                 />
                 <View>

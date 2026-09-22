@@ -26,6 +26,11 @@ export interface Esp32Status {
   ap_ip: string;
   lora_ready: boolean;
   recording_active: boolean;
+  packet_number: number;
+  pending_uploads: number;
+  uploader_busy: boolean;
+  successful_uploads: number;
+  failed_upload_retries: number;
 }
 
 export class Esp32Error extends Error {
