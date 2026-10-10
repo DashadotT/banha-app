@@ -26,11 +26,16 @@ export interface Esp32Status {
   ap_ip: string;
   lora_ready: boolean;
   recording_active: boolean;
-  packet_number: number;
-  pending_uploads: number;
-  uploader_busy: boolean;
-  successful_uploads: number;
-  failed_upload_retries: number;
+  /** Highest DATA packet number received in the current recording. */
+  packet_number?: number;
+  pending_uploads?: number;
+  uploader_busy?: boolean;
+  successful_uploads?: number;
+  failed_upload_retries?: number;
+  /** True if Node 2 has heard from Node 1 recently (see NODE1_LINK_TIMEOUT_MS in the .ino). */
+  node1_connected?: boolean;
+  /** Seconds since Node 2 last heard from Node 1, or -1 if never. */
+  node1_last_seen_seconds?: number;
 }
 
 export class Esp32Error extends Error {

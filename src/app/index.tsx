@@ -9,11 +9,11 @@ import { Footer } from "@/components/footer";
 import { OfflineNotice } from "@/components/offline-notice";
 import { PrimaryButton } from "@/components/primary-button";
 import { useEsp32Status } from "@/hooks/use-esp32-status";
-import { ESP32_AP_SSID } from "@/lib/esp32";
+import { ESP32_AP_SSID, Esp32Status } from "@/lib/esp32";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { status, connectionState, errorMessage, lastUpdated, refresh } = useEsp32Status();
+  const { status, connectionState, errorMessage, lastUpdated, refresh } = useEsp32Status(2000);
   const [manualRefreshing, setManualRefreshing] = useState(false);
 
   const onPullToRefresh = useCallback(async () => {
@@ -61,6 +61,8 @@ export default function HomeScreen() {
               label="LoRa Radio"
               value={<Badge tone={status.lora_ready ? "ok" : "bad"} label={status.lora_ready ? "Ready" : "Not Ready"} />}
             />
+            <StatusRow label="Nodes" value={<NodesBadge status={status} />} />
+            <StatusRow label="Last Heard from Sensor Node" value={lastHeardLabel(status.node1_last_seen_seconds)} />
             <StatusRow
               label="Recording"
               value={
@@ -72,7 +74,11 @@ export default function HomeScreen() {
             />
             <StatusRow
               label="Packets Received"
-              value={status.recording_active ? String(status.packet_number) : "—"}
+              value={
+                status.recording_active && status.packet_number != null
+                  ? String(status.packet_number)
+                  : "—"
+              }
               last
             />
           </Card>
@@ -80,26 +86,28 @@ export default function HomeScreen() {
           <Card>
             <View className="mb-3.5 flex-row items-center justify-between">
               <CardTitle>Upload Queue</CardTitle>
-              <Badge
-                tone={status.uploader_busy ? "warn" : "ok"}
-                label={status.uploader_busy ? "Uploading…" : "Idle"}
-              />
+              <Badge tone={uploadState(status).tone} label={uploadState(status).label} />
             </View>
 
             <StatusRow
               label="Pending Uploads"
               value={
                 <Badge
-                  tone={status.pending_uploads > 0 ? "warn" : "ok"}
-                  label={String(status.pending_uploads)}
+                  tone={(status.pending_uploads ?? 0) > 0 ? "warn" : "ok"}
+                  label={String(status.pending_uploads ?? 0)}
                 />
               }
             />
-            <StatusRow label="Successful Uploads" value={String(status.successful_uploads)} />
+            <StatusRow
+              label="Successful Uploads"
+              value={status.recording_active ? String(status.successful_uploads ?? 0) : "—"}
+            />
             <StatusRow
               label="Failed Upload Retries"
-              value={String(status.failed_upload_retries)}
-              valueClassName={status.failed_upload_retries > 0 ? "text-danger" : undefined}
+              value={status.recording_active ? String(status.failed_upload_retries ?? 0) : "—"}
+              valueClassName={
+                status.recording_active && (status.failed_upload_retries ?? 0) > 0 ? "text-danger" : ""
+              }
               last
             />
           </Card>
@@ -129,6 +137,33 @@ export default function HomeScreen() {
       <Footer />
     </ScrollView>
   );
+}
+
+function NodesBadge({ status }: { status: Esp32Status }) {
+  if (status.node1_connected === undefined) {
+    return <Badge tone="warn" label="Unknown" />;
+  }
+  return (
+    <Badge
+      tone={status.node1_connected ? "ok" : "bad"}
+      label={status.node1_connected ? "Connected" : "Disconnected"}
+    />
+  );
+}
+
+function lastHeardLabel(seconds?: number): string {
+  if (seconds === undefined) return "—";
+  if (seconds < 0) return "Never";
+  if (seconds < 60) return `${seconds}s ago`;
+  return `${Math.round(seconds / 60)}m ago`;
+}
+
+function uploadState(status: Esp32Status): { tone: BadgeTone; label: string } {
+  const pending = status.pending_uploads ?? 0;
+  if (pending > 0 && !status.wifi_connected) return { tone: "bad", label: "Waiting for WiFi" };
+  if (status.uploader_busy || pending > 0) return { tone: "warn", label: "Uploading…" };
+  if (status.recording_active) return { tone: "ok", label: "Up to date" };
+  return { tone: "ok", label: "Idle" };
 }
 
 function wifiTone(status: { wifi_connected: boolean; wifi_connecting: boolean }): BadgeTone {

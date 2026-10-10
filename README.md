@@ -57,13 +57,23 @@ npx expo install expo-router expo-status-bar expo-linking expo-constants \
   device's own `getConnectingHTML()` flow — because BANHA-SETUP never
   goes down during this, the phone stays connected throughout.
 
+## Fields the dashboard reads from `/status`
+
+Required (original firmware): `wifi_connected`, `wifi_connecting`, `configured_ssid`,
+`ssid`, `ip`, `ap_ssid`, `ap_ip`, `lora_ready`, `recording_active`.
+
+Optional (v14 firmware + patch, the app shows "—"/"Unknown" if missing):
+`packet_number`, `pending_uploads`, `uploader_busy`, `successful_uploads`,
+`failed_upload_retries`, `node1_connected`, `node1_last_seen_seconds`.
+
 ## Known limitation (by design of the current firmware)
 
-`node2.ino` doesn't currently expose live sensor readings (CO2 / temp /
-noise / packet number) or a way to start/stop a recording over HTTP —
-those are LoRa-only (driven by Node 1) and get pushed straight to
-Supabase from the device. The app can only show what `/status` reports:
-whether a recording is active, not the live values.
+`node2.ino` exposes the current recording's packet count (`packet_number`
+in `/status`, tracking `lastUploadedPacketNumber`) but not the live sensor
+values themselves — CO2 / temp / noise / packet number for the
+*in-progress* reading, or a way to start/stop a recording over HTTP.
+Those are LoRa-only (driven by Node 1) and get pushed straight to
+Supabase from the device.
 
 If you want the app to show live readings and let you start/stop
 recordings, add two small pieces to `node2.ino`:
